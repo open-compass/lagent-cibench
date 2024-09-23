@@ -1,3 +1,5 @@
+from typing import List
+
 from lagent.actions import ActionExecutor
 from lagent.actions.base_action import BaseAction
 from lagent.llms.base_llm import BaseModel
@@ -17,6 +19,8 @@ class BaseAgent:
 
     def __init__(self, llm: BaseModel, action_executor: ActionExecutor,
                  protocol: object) -> None:
+
+        self._session_history = []
         self._llm = llm
         self._action_executor = action_executor
         self._protocol = protocol
@@ -37,5 +41,9 @@ class BaseAgent:
         """
         self._action_executor.del_action(name)
 
-    def chat(self, message: str, **kwargs) -> AgentReturn:
+    def chat(self, message: str) -> AgentReturn:
         raise NotImplementedError
+
+    @property
+    def session_history(self) -> List:
+        return self._session_history
